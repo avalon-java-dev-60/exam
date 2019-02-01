@@ -53,7 +53,10 @@ public class Registrator extends HttpServlet {
             }
         }
         
-        Attribute a = new Attribute();
+        Attribute a = (Attribute)getServletContext().getAttribute("attribute");
+        if (a == null){
+            getServletContext().setAttribute("attribute", a);
+        }
         if(prm != null) {
             reply = "<h3>" + "Added" + "</h3>";
             for(Parameter p : a.getList()){
