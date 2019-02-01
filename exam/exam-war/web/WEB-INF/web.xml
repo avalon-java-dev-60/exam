@@ -10,11 +10,11 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>Registrator</servlet-name>
-        <url-pattern>/Registrator</url-pattern>
+        <url-pattern>/registrator</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ViewList</servlet-name>
-        <url-pattern>/ViewList</url-pattern>
+        <url-pattern>/view</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

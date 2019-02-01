@@ -7,6 +7,7 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Victor.Malmygin
  */
-public class Registrator extends HttpServlet {
+public class ViewList extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -29,62 +30,43 @@ public class Registrator extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String reply = null;
         
-        String data_name;
-        int value;
-        Parameter prm = null;
-        
-        
-        
-        data_name = request.getParameter("data-name");
-        if (data_name.isEmpty() || data_name.length() > 255){
-            reply = "<h3>Error: " + "wrong data name" + "</h3>";
-        }else{
-            try {
-                value = Integer.parseInt(request.getParameter("value"));
-                    try {
-                        prm = new Parameter(data_name, value);
-                    }catch(Exception e){
-                        reply = "<h3>Error: " + e.getMessage() + "</h3>";
-                    }
-            }catch (NumberFormatException e){
-                reply = "<h3>Error: " + e.getMessage() + "</h3>";
-            }
+        String data_name = request.getParameter("data-name");
+        int value_min = 0;
+        try{
+            value_min = Integer.parseInt(request.getParameter("value_min"));
+        }catch(NumberFormatException e){
+            
+        }
+        int value_max = 0;
+        try{
+            value_max = Integer.parseInt(request.getParameter("value_max"));
+        }catch(NumberFormatException e){
+            
         }
         
         Attribute a = (Attribute)getServletContext().getAttribute("attribute");
-        if (a == null){
-            a = new Attribute();
-            getServletContext().setAttribute("attribute", a);
-        }
-        if(prm != null) {
-            reply = "<h3>" + "Added" + "</h3>";
-            for(Parameter p : a.getList()){
-                if(prm.getData_name().equals(p.getData_name())){
-                    reply = "<h3>Warning: " + "replaced" + "</h3>";
-                    break;
-                }              
+        if (a != null){
+            ArrayList<Parameter> list = (ArrayList) a.getList();
+   
+            if (data_name.isEmpty() && value_max == 0 && value_min == 0){
+                StringBuilder str = new StringBuilder();
+                for (Parameter prm : list){
+                    str.append(prm.getData_name() + " : " + prm.getValue() + "<br>");
+                }
             }
-            a.add(prm);
         }
-          
+        
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Registrator</title>");            
+            out.println("<title>Servlet ViewList</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Registrator at " + reply + "</h1>");
-
-//            Map<String,String[]> map = request.getParameterMap();
-//            for (Entry entry : map.entrySet()){
-//                out.println(entry.getKey() + " " + ((String[])entry.getValue())[0] + "<br>");
-//            }
-
+            out.println("<h1>Servlet ViewList at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
