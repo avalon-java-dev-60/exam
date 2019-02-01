@@ -24,7 +24,13 @@ public class Attribute {
         return list;
     }
     
-    public void add(Parameter prm){
-        list.add(prm);
+    boolean add(Parameter prm){
+        for(Parameter p : list){
+            if (prm.getData_name().equals(p.getData_name())){
+                p.setValue(prm.getValue());
+                return true;
+            }
+        }
+        return list.add(prm);
     }
 }

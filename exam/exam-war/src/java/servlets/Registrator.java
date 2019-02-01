@@ -7,6 +7,9 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
+import java.util.Map;
+import java.util.Map.Entry;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +32,12 @@ public class Registrator extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        if (request.getParameter("view")!= null){
+            request.getRequestDispatcher("view.html").forward(request, response);
+            return;
+        }
+        
         String reply = null;
         
         String data_name;
@@ -59,14 +68,16 @@ public class Registrator extends HttpServlet {
             getServletContext().setAttribute("attribute", a);
         }
         if(prm != null) {
-            reply = "<h3>" + "Added" + "</h3>";
+            reply = "<h3>" + prm.getData_name() + " : " + prm.getValue() + " added" + "</h3>";
             for(Parameter p : a.getList()){
                 if(prm.getData_name().equals(p.getData_name())){
-                    reply = "<h3>Warning: " + "replaced" + "</h3>";
+                    reply = "<h3>Warning: " + p.getData_name() + " replaced to " + prm.getValue() + "</h3>";
                     break;
                 }              
             }
-            a.add(prm);
+            if(!a.add(prm)){
+                reply = "<h3>" + prm.getData_name() + " : " + prm.getValue() + " not added" + "</h3>";
+            }
         }
           
         response.setContentType("text/html;charset=UTF-8");
@@ -75,10 +86,10 @@ public class Registrator extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Registrator</title>");            
+            out.println("<title>Registrator</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Registrator at " + reply + "</h1>");
+            out.println("<h1>" + reply + "</h1>");
 
 //            Map<String,String[]> map = request.getParameterMap();
 //            for (Entry entry : map.entrySet()){

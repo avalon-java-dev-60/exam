@@ -31,14 +31,20 @@ public class ViewList extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        if (request.getParameter("new")!= null){
+            request.getRequestDispatcher("index.html").forward(request, response);
+        }
+        
+        String reply = null;
+        
         String data_name = request.getParameter("data-name");
-        int value_min = 0;
+        int value_min = Integer.MIN_VALUE;
         try{
             value_min = Integer.parseInt(request.getParameter("value_min"));
         }catch(NumberFormatException e){
             
         }
-        int value_max = 0;
+        int value_max = Integer.MAX_VALUE;
         try{
             value_max = Integer.parseInt(request.getParameter("value_max"));
         }catch(NumberFormatException e){
@@ -48,15 +54,23 @@ public class ViewList extends HttpServlet {
         Attribute a = (Attribute)getServletContext().getAttribute("attribute");
         if (a != null){
             ArrayList<Parameter> list = (ArrayList) a.getList();
-   
-            if (data_name.isEmpty() && value_max == 0 && value_min == 0){
-                StringBuilder str = new StringBuilder();
-                for (Parameter prm : list){
-                    str.append(prm.getData_name() + " : " + prm.getValue() + "<br>");
-                }
+            StringBuilder str = new StringBuilder();
+            for (Parameter prm : list){
+                if (prm.getData_name().contains(data_name)){
+                    if (prm.getValue() <= value_max && prm.getValue() >= value_min){
+                       str.append(prm.getData_name()).append(" : ").append(prm.getValue()).append("<br>");
+                    }
+                }                    
             }
+            if(str.length()!=0){
+                reply = str.toString();
+            }else{
+                reply = "not found";
+            }   
+        }else{
+            reply = "not found";
         }
-        
+            
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
@@ -66,7 +80,7 @@ public class ViewList extends HttpServlet {
             out.println("<title>Servlet ViewList</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ViewList at " + request.getContextPath() + "</h1>");
+            out.println("<h1>" + reply + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
