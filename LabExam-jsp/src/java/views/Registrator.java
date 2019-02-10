@@ -1,12 +1,9 @@
 package views;
 
-import domain.Attribute;
 import domain.Parameter;
-//import ejb.SelectBean;
-//import ejb.UpdateBean;
+import ejb.UpdateBean;
 import java.io.IOException;
-import java.util.Arrays;
-//import javax.ejb.EJB;
+import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,65 +18,43 @@ public class Registrator extends HttpServlet {
     String parameter;
     String value;
     Parameter param;
-    static Attribute attrib = new Attribute();
+    RequestDispatcher dispatcher;
 
-//    @EJB
-//    SelectBean selectBean;
-//    @EJB
-//    UpdateBean udpateBean;
+    @EJB
+    UpdateBean updateBean;
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getParameter("submitButton") != null) {
-            registrator(request, response);
+            registratorAdd(request, response);
+        } else if ((request.getParameter("deleteButton") != null)) {
+            registratorDel(request, response);
         } else {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+            dispatcher = request.getRequestDispatcher("/index.jsp");
             dispatcher.forward(request, response);
         }
     }
 
-    protected void registrator(HttpServletRequest request, HttpServletResponse response)
+    protected void registratorAdd(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         parameter = request.getParameter("userParameter");
         value = request.getParameter("userValue");
-        int intvalue = 0;
-
-        String error;
         System.out.println(parameter);
         System.out.println(value);
-
         if (parameter != null && !parameter.isEmpty()) {
             request.setAttribute("userParameter", parameter);
             if (value != null && !value.isEmpty()) {
-                intvalue = Integer.parseInt(value);
                 request.setAttribute("userValue", value);
-//                System.out.println(attrib.getList());
                 try {
-//                    if (attrib.getList().isEmpty()) {
                     //Новый параметр
-                    param = new Parameter(parameter, intvalue);
-                    attrib.add(param);
-//                    System.out.println(param.printInfo());
-                    
-                    
-                    request.setAttribute("message", "You input new parameter");
-//                    } else {
-//                        for (Parameter p : attrib.getList()) {
-//                            param = new Parameter(parameter, intvalue);
-//                            //Замена параметра
-//                            if (parameter.equals(p.getParameter())) {
-//                                param.changeParam(parameter);
-//                                attrib.add(param);
-//                                request.setAttribute("message", "You change old parameter");
-//                                System.out.println("Change " + param);
-//                            } else {
-//                                attrib.add(param);
-//                                System.out.println("New " + param);
-//                                request.setAttribute("message", "You input new parameter");
-//                            }
-//                        }
-//                    }
+                    boolean add = updateBean.addNew(parameter, value);
+                    if (add == true) {
+                        request.setAttribute("message", "You input new parameter");
+                    } else {
+                        request.setAttribute("message", "You change old parameter");
+                    }
                 } catch (Exception e) {
-//                    printStackTrace(e);
+                    printStackTrace(e);
                     request.setAttribute("error", "Parameter not exist!");
                 }
 
@@ -89,9 +64,36 @@ public class Registrator extends HttpServlet {
         } else {
             request.setAttribute("error", "Parameter is required!");
         }
-
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+        dispatcher = request.getRequestDispatcher("/index.jsp");
         dispatcher.forward(request, response);
     }
 
+    protected void registratorDel(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        parameter = request.getParameter("userParameter");
+        value = request.getParameter("userValue");
+        System.out.println(parameter);
+        System.out.println(value);
+        if (parameter != null && !parameter.isEmpty()) {
+            request.setAttribute("userParameter", parameter);
+            try {
+                //Новый параметр
+                boolean del = updateBean.delete(parameter);
+                if (del == true) {
+                    request.setAttribute("message", "You delete parameter");
+                } else {
+                    request.setAttribute("message", "Parameter not exist or delete yet");
+                }
+            } catch (Exception e) {
+                printStackTrace(e);
+                request.setAttribute("error", "Parameter not exist!");
+            }
+
+        } else {
+            request.setAttribute("error", "Parameter is required!");
+        }
+
+        dispatcher = request.getRequestDispatcher("/index.jsp");
+        dispatcher.forward(request, response);
+    }
 }

@@ -1,22 +1,25 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package ejb;
 
+import database.DBParameter;
+import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
 
-/**
- *
- * @author JAVA
- */
 @Stateless
-@LocalBean
+//@LocalBean
 public class UpdateBean {
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+    @EJB
+    DBParameterFacade DBparameter;
+
+    public boolean addNew(String param, String value) throws InstantiationException {
+        int intvalue = Integer.parseInt(value);
+        return DBparameter.addNew(param, intvalue);
+    }
+
+    public  boolean delete(String param) {
+        return  DBparameter.delete(param);
+    }
+
 }

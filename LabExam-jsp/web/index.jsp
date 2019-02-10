@@ -16,7 +16,7 @@
                     <input type="number" name="userValue" value="${userValue}" pattern="\d">
                 </label>
                 <br />
-            </label> <button type="submit" name="submitButton">Submit</button>         
+            </label> <button type="submit" name="submitButton">Submit</button> <button type="submit" name="deleteButton">Delete</button>         
         </form>
         <form method="post" action="/labExam/viewlist">
             <button type="submit" name="viewListButton">View List</button>
