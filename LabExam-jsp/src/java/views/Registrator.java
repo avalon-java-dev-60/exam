@@ -1,6 +1,5 @@
 package views;
 
-import domain.Parameter;
 import ejb.UpdateBean;
 import java.io.IOException;
 import javax.ejb.EJB;
@@ -17,7 +16,6 @@ public class Registrator extends HttpServlet {
 
     String parameter;
     String value;
-    Parameter param;
     RequestDispatcher dispatcher;
 
     @EJB
@@ -39,14 +37,11 @@ public class Registrator extends HttpServlet {
             throws ServletException, IOException {
         parameter = request.getParameter("userParameter");
         value = request.getParameter("userValue");
-        System.out.println(parameter);
-        System.out.println(value);
         if (parameter != null && !parameter.isEmpty()) {
             request.setAttribute("userParameter", parameter);
             if (value != null && !value.isEmpty()) {
                 request.setAttribute("userValue", value);
                 try {
-                    //Новый параметр
                     boolean add = updateBean.addNew(parameter, value);
                     if (add == true) {
                         request.setAttribute("message", "You input new parameter");
@@ -72,12 +67,10 @@ public class Registrator extends HttpServlet {
             throws ServletException, IOException {
         parameter = request.getParameter("userParameter");
         value = request.getParameter("userValue");
-        System.out.println(parameter);
-        System.out.println(value);
         if (parameter != null && !parameter.isEmpty()) {
             request.setAttribute("userParameter", parameter);
+            request.setAttribute("userValue", value);
             try {
-                //Новый параметр
                 boolean del = updateBean.delete(parameter);
                 if (del == true) {
                     request.setAttribute("message", "You delete parameter");

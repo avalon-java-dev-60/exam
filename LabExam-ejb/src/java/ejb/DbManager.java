@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ejb;
 
 import java.io.Serializable;
@@ -12,10 +7,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 
-/**
- *
- * @author Havok
- */
 @Singleton
 public class DbManager implements Serializable {
 
@@ -43,11 +34,4 @@ public class DbManager implements Serializable {
         getEntityManager().merge(entity);
     }
 
-    public Query findAll(Class entity) {
-        javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
-        cq.select(cq.from(entity));
-        return getEntityManager().createQuery(cq);
-    }
 }
-
-

@@ -16,18 +16,24 @@ import javax.persistence.Table;
     @NamedQuery(
             name = "parameter.findParam",
             query = "SELECT p FROM DBParameter AS p WHERE p.param = :param"
-            
     )
-    ,     
-    @NamedQuery(
-            name = "parameter.findTemplate",
+    , 
+
+@NamedQuery(
+            name = "parameter.findAll",
             query = "SELECT p FROM DBParameter p"
+    )
+    ,
+        @NamedQuery(
+            name = "parameter.findTemplate",
+            query = "SELECT p FROM DBParameter p WHERE p.param like :template"
     )
     ,
     @NamedQuery(
             name = "parameter.findInterval",
-            query = "SELECT p FROM DBParameter p"
+            query = "SELECT p FROM DBParameter p WHERE p.value >= :begin and p.value <= :end"
     )
+
 })
 
 public class DBParameter implements Serializable {
@@ -36,8 +42,8 @@ public class DBParameter implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID")
     private Long id;
+    
     @Column(name = "PARAM")
     private String param;
     @Column(name = "VAL")

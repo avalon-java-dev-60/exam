@@ -1,12 +1,12 @@
 package ejb;
 
 import database.DBParameter;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 
 @Stateless
-
 public class DBParameterFacade extends AbstractManagerFacade<DBParameter> {
 
     public DBParameterFacade() {
@@ -24,33 +24,45 @@ public class DBParameterFacade extends AbstractManagerFacade<DBParameter> {
         }
     }
 
-    public DBParameter findAll() {
+    public List<DBParameter> findAll() {
         try {
-            return (DBParameter) dbmanager
+            return dbmanager
                     .getNamedQuery("parameter.findAll")
                     .getResultList();
         } catch (NoResultException e) {
             return null;
+        } catch (PersistenceException pe) {
+            pe.printStackTrace(System.err);
+        return null;
         }
     }
 
-    public DBParameter findTemplate(String template) {
+    public List<DBParameter> findTemplate(String template) {
         try {
-            return (DBParameter) dbmanager
+            return dbmanager
                     .getNamedQuery("parameter.findTemplate")
-                    .getSingleResult();
+                    .setParameter("template", template)
+                    .getResultList();
         } catch (NoResultException e) {
             return null;
+        } catch (PersistenceException pe) {
+            pe.printStackTrace(System.err);
+        return null;
         }
     }
 
-    public DBParameter findInterval(int begin, int end) {
+    public List<DBParameter> findInterval(int begin, int end) {
         try {
-            return (DBParameter) dbmanager
+            return dbmanager
                     .getNamedQuery("parameter.findInterval")
-                    .getSingleResult();
+                    .setParameter("begin", begin)
+                    .setParameter("end", end)
+                    .getResultList();
         } catch (NoResultException e) {
             return null;
+        } catch (PersistenceException pe) {
+            pe.printStackTrace(System.err);
+        return null;
         }
     }
 
