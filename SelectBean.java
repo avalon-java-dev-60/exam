@@ -5,6 +5,7 @@
  */
 package ejb;
 
+import database.Parameter;
 import java.util.ArrayList;
 import javax.ejb.Stateless;
 
@@ -16,17 +17,17 @@ import javax.ejb.Stateless;
 public class SelectBean implements SelectBeanLocal {
 
     @Override
-    public ArrayList<String> selectAll() {
+    public ArrayList<Parameter> selectAll() {
         return null;
     }
 
     @Override
-    public String selectOneRec(String name) {
+    public Parameter selectOneRec(String name) {
        return null; 
     }
 
     @Override
-    public ArrayList<String> selectAllPatt() {
+    public ArrayList<Parameter> selectAllPatt() {
         return null;
     }
 

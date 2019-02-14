@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servlets;
+package database;
 
 import java.util.ArrayList;
 
@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * @author MultatulyIM
  */
 public class Attribute {
-    static ArrayList<Parameter> list=new ArrayList<Parameter>();
+    public static ArrayList<Parameter> list=new ArrayList<Parameter>();
     Attribute(){}
     
 }

@@ -5,6 +5,7 @@
  */
 package ejb;
 
+import database.Parameter;
 import java.util.ArrayList;
 import javax.ejb.Local;
 
@@ -14,8 +15,8 @@ import javax.ejb.Local;
  */
 @Local
 public interface SelectBeanLocal {
-    public ArrayList<String> selectAll();
-    public String selectOneRec(String name);
-    public ArrayList<String> selectAllPatt();
+    public ArrayList<Parameter> selectAll();
+    public Parameter selectOneRec(String name);
+    public ArrayList<Parameter> selectAllPatt();
     
 }

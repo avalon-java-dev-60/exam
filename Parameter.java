@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servlets;
+package database;
 
 import static java.lang.Integer.parseInt;
 
@@ -14,7 +14,7 @@ import static java.lang.Integer.parseInt;
 public class Parameter {
     private String name;
     private int value;
-    Parameter(){
+    public Parameter(){
         this.name="";
         this.value=0;
     }
